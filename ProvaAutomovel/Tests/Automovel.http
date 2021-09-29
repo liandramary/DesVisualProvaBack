@@ -1,0 +1,13 @@
+### Cadastrar um novo carro
+POST https://localhost:5001/api/automovel/create
+Content-Type: application/json
+
+{
+    "Marca": "Nissan",
+    "Modelo" : "Versa",
+    "Ano": 2018,
+    "Cor" : "Preto"
+}
+
+### Listar todos os carros
+GET https://localhost:5001/api/automovel/list

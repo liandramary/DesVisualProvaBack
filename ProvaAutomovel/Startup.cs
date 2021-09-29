@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ProvaAutomovel.Data;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,10 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
-namespace ProvaAutommovel
+namespace ProvaAutomovel
 {
     public class Startup
     {
@@ -26,11 +28,25 @@ namespace ProvaAutommovel
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Configurar a política de CORS para requisições de qualquer origem
+            services.AddCors(
+                options =>
+                {
+                    options.AddPolicy("CorsPolicy", builder => builder
+                        .AllowAnyOrigin());
+                }
+            );
+
+            //Configurar todas as injeções de dependência da sua aplicação
+            services.AddDbContext<DataContext>
+            (
+                options => options.UseInMemoryDatabase("database")
+            );
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProvaAutommovel", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProvaAutomovel", Version = "v1" });
             });
         }
 
@@ -41,8 +57,10 @@ namespace ProvaAutommovel
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProvaAutommovel v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProvaAutomovel v1"));
             }
+
+            app.UseCors("CorsPolicy");
 
             app.UseHttpsRedirection();
 

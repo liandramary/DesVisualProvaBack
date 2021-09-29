@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "ProvaAutommovel": {
+    "ProvaAutomovel": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
